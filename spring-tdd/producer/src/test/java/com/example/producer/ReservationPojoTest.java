@@ -14,7 +14,8 @@ public class ReservationPojoTest {
         Reservation re = new Reservation("1", "Jane");
         Assert.assertEquals(re.getName(), "Jane");
         Assert.assertThat(re.getName(), Matchers.equalToIgnoringCase("jane"));
-        Assert.assertThat(re.getName(), new BaseMatcher(){
+        
+        Assert.assertThat(re.getName(), new BaseMatcher <String> (){
             @Override
             public boolean matches(Object item){
                 return Character.isUpperCase(((String) item).charAt(0) );
