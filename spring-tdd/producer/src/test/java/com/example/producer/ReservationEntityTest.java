@@ -26,7 +26,7 @@ public class ReservationEntityTest {
                 @Override
                 public boolean test(Reservation reservation) {
                     return reservation.getName().equalsIgnoreCase("a") &&
-                        reservation.getId() != null;
+                        reservation.getId() == null;
                 }
             });
     }
