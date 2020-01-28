@@ -25,9 +25,9 @@ public class ReservationEntityTest {
             .expectNextMatches(new Predicate<Reservation>() {
                 @Override
                 public boolean test(Reservation reservation) {
-                    return reservation.getName().equalsIgnoreCase("a") &&
-                        reservation.getId() == null;
+                    return reservation.getName().equalsIgnoreCase("jane") &&
+                        reservation.getId() != null;
                 }
-            });
+            }).verifyComplete();
     }
 }
