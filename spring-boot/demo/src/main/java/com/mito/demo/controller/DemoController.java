@@ -19,11 +19,17 @@ public class DemoController {
 	public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
 		//logica
 		Persona p = new Persona();
-		p.setIdPersona(1);
-		p.setNombre("nombre");
+		p.setIdPersona(2);
+		p.setNombre("Code");
 		repo.save(p);
-		
+
 		model.addAttribute("name", name);
+		return "greeting";
+	}
+
+	@GetMapping("/listar")
+	public String greeting(Model model) {
+		model.addAttribute("personas", repo.findAll());
 		return "greeting";
 	}
 }
