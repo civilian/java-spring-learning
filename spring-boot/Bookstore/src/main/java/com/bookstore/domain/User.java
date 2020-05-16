@@ -16,10 +16,13 @@ import javax.persistence.OneToMany;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.bookstore.domain.security.Authority;
+import com.bookstore.domain.security.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class User {
+public class User implements UserDetails{
+	// UserDetails is implemented to use this user with the spring framework
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -35,6 +38,9 @@ public class User {
 	private String phone;
 	private boolean enabled=true;
 	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JsonIgnore
+	private Set<UserRole> userRoles = new HashSet<>();
 	
 	public Long getId() {
 		return id;
@@ -82,5 +88,42 @@ public class User {
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
+	public Set<UserRole> getUserRoles() {
+		return userRoles;
+	}
+	public void setUserRoles(Set<UserRole> userRoles) {
+		this.userRoles = userRoles;
+	}
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// this is the method UserDetails needs you to implement
+		Set<GrantedAuthority> authorites = new HashSet<>();
+		// For each is added for spring does not exists in java
+		userRoles.forEach(ur -> authorites.add(new Authority(ur.getRole().getName())));
+		
+		return authorites;
+	}
+	
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	
+	@Override
+	public boolean isEnabled() {
+		return enabled;
+	}
+	
 	
 }
